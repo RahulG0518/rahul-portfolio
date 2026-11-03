@@ -53,21 +53,6 @@ function Hero() {
     },
   };
 
-  const imageVariants = {
-    hidden: {
-      opacity: 0,
-      scale: 1.06,
-    },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 1.2,
-        ease: [0.22, 1, 0.36, 1],
-      },
-    },
-  };
-
   return (
     <>
       <style>{`
@@ -92,6 +77,8 @@ function Hero() {
           object-fit: cover;
           object-position: center;
           z-index: -2;
+          display: block;
+          opacity: 1;
         }
 
         .hero-overlay {
@@ -255,7 +242,6 @@ function Hero() {
           height: 19px;
         }
 
-        /* Tablet */
         @media (max-width: 850px) {
           .hero-section {
             min-height: 100svh;
@@ -296,7 +282,6 @@ function Hero() {
           }
         }
 
-        /* Mobile */
         @media (max-width: 550px) {
           .hero-section {
             padding: 100px 22px 65px;
@@ -371,19 +356,12 @@ function Hero() {
       `}</style>
 
       <section className="hero-section" id="home">
-        <motion.img
+        <img
           className="hero-background"
           src={personalInfo.image}
           alt=""
           aria-hidden="true"
           fetchPriority="high"
-          variants={imageVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{
-            once: false,
-            amount: 0.15,
-          }}
         />
 
         <div className="hero-overlay" />

@@ -1,9 +1,36 @@
 
+import { useState } from "react";
 import { ExternalLink } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 import { motion } from "framer-motion";
 
 import { projects } from "../data/portfolio";
+
+function ProjectImage({ project }) {
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
+
+  return (
+    <div className="project-image">
+      {!imageError ? (
+        <img
+          src={project.image}
+          alt={`${project.name} project preview`}
+          loading="eager"
+          onLoad={() => setImageLoaded(true)}
+          onError={() => setImageError(true)}
+          style={{
+            opacity: imageLoaded ? 1 : 0,
+          }}
+        />
+      ) : (
+        <div className="project-image-fallback">
+          {project.name}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function Projects() {
   const containerVariants = {
@@ -121,11 +148,20 @@ function Projects() {
           height: 100%;
           object-fit: cover;
           display: block;
-          transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+          opacity: 0;
+          transition:
+            opacity 0.35s ease,
+            transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         .project-card:hover .project-image img {
           transform: scale(1.035);
+        }
+
+        .project-image-fallback {
+          color: #344054;
+          font-size: 16px;
+          font-weight: 600;
         }
 
         .project-content {
@@ -252,7 +288,6 @@ function Projects() {
 
       <section className="projects-section" id="projects">
         <div className="projects-container">
-
           <motion.div
             className="projects-header"
             variants={containerVariants}
@@ -261,9 +296,7 @@ function Projects() {
             viewport={{ once: false, amount: 0.3 }}
           >
             <motion.div variants={cardVariants}>
-              <span className="projects-eyebrow">
-                MY WORK
-              </span>
+              <span className="projects-eyebrow">MY WORK</span>
 
               <h2>
                 Featured <span>Projects.</span>
@@ -293,16 +326,9 @@ function Projects() {
                 key={project.id}
                 variants={cardVariants}
               >
-                <div className="project-image">
-                  <img
-                    src={project.image}
-                    alt={`${project.name} project preview`}
-                    loading="lazy"
-                  />
-                </div>
+                <ProjectImage project={project} />
 
                 <div className="project-content">
-
                   <div className="project-topline">
                     <span className="project-status">
                       {project.status}
@@ -328,12 +354,11 @@ function Projects() {
                   </div>
 
                   <div className="project-links">
-
                     {project.liveUrl && (
                       <a
                         href={project.liveUrl}
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                       >
                         <ExternalLink />
                         Live Preview
@@ -344,20 +369,17 @@ function Projects() {
                       <a
                         href={project.githubUrl}
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                       >
                         <FaGithub />
                         Source Code
                       </a>
                     )}
-
                   </div>
-
                 </div>
               </motion.article>
             ))}
           </motion.div>
-
         </div>
       </section>
     </>
